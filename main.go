@@ -28,16 +28,15 @@ func main() {
 
     // 设置 /list 的处理程序
     http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
-        cmd := "cat list"
-        output, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+        output, err := exec.Command("cat", "list").Output()
         if err != nil {
-            errorMsg := fmt.Sprintf("<h2>Error executing command:</h2><p>%s</p>", err)
-            w.Write([]byte(errorMsg))
+            // 如果命令执行出错，则输出错误信息到客户端
+            w.Header().Set("Content-Type", "text/html")
+            fmt.Fprintf(w, "<pre>%v</pre>n", err)
             return
         }
-        outputString := strings.Replace(string(output), "n", "<br>", -1)
-        htmlOutput := fmt.Sprintf("<h2>%s:</h2><p>%s</p>", cmd, outputString)
-        w.Write([]byte(htmlOutput))
+        // 输出命令执行结果到客户端
+        fmt.Fprintf(w, "<pre>%s</pre>n", output)
     })
 
     // 启动 HTTP 服务器并监听端口
