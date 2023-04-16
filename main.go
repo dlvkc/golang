@@ -35,8 +35,7 @@ func main() {
             w.Write([]byte(errorMsg))
             return
         }
-        outputString := string(output)
-        outputString = strings.Replace(outputString, "n", "<br>", -1) // 修改此处
+        outputString := strings.ReplaceAll(string(output), "n", "\n")
         htmlOutput := fmt.Sprintf("<h2>%s:</h2><p>%s</p>", cmd, outputString)
         w.Write([]byte(htmlOutput))
     })
