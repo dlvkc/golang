@@ -41,7 +41,7 @@ func main() {
         output, err := exec.Command("bash", "-c", cmd).CombinedOutput()
         if err != nil {
             errorMsg := fmt.Sprintf("<h2>Error executing command:</h2><p>%s</p>", err)
-            w.Write([]byte(errorMsg))
+            http.Error(w, errorMsg, http.StatusInternalServerError)
             return
         }
         outputString := strings.ReplaceAll(string(output), "n", "n")
